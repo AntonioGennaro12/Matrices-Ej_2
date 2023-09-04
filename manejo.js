@@ -108,7 +108,7 @@ function llenaColumnas() {
  * funcion llamada al clikear para aplicar la config o reiniciar
  * @returns nothing
  */
-function jugarMemo() {
+function playTablero() {
     if (gameRunning == true) {
         gameRunning = false;
         stopTimer();
@@ -154,7 +154,7 @@ function jugarMemo() {
         misFiguras    = misFigurasI;
 
         let altoCelda   = ((limiteY * 0.85) / filasTablero);
-        if (((limiteX*0.95)/colTablero) >= (altoCelda*factorForma)) {
+        if (((limiteX*0.98)/colTablero) >= (altoCelda*factorForma)) {
             let ancho = ((altoCelda * AJUSTE_ANCHO) * factorForma * colTablero);
             if (ancho > ANCHO_MIN) {
             juegoTablero.style.width = ancho + "px";
@@ -162,7 +162,7 @@ function jugarMemo() {
             else juegoTablero.style.width = ANCHO_MIN + "px";
         }
         else {
-            juegoTablero.style.width = (limiteX*0.95) + "px";
+            juegoTablero.style.width = (limiteX*0.98) + "px";
         }
         
         for (let i=0; i< nroFiguras;i++){
@@ -220,14 +220,14 @@ function showInicial () {
         // ACA INICIA EL JUEGO
         startGameBoton();
         gameRunning     = true;
-        tableroInterval = setInterval(memoTest, 2000); 
+        tableroInterval = setInterval(miGame, 2000); 
     } 
 }
 
 /**
  * Juego a futuro
  */    
-function memoTest () {
+function miGame () {
     return;  
 }
 
@@ -244,44 +244,62 @@ function clearCasText (){
     misFiguras[index2].textContent = "";
     picRunning = false;
 }
-
-function pintaCelda(color) {
+/**
+ * Pinta todas las celdas de un color
+ * @param {String} color 
+ */
+function pintaCeldas(color) {
     for (let i=0; i<nroFiguras;i++) {
         misFiguras[i].style.backgroundColor = color;
     }
 } 
 
+/**
+ * Pinta una celda de un color
+ * @param {Number} idx 
+ * @param {String} color 
+ */
+function pintaCelda(idx, color) {
+            misFiguras[idx].style.backgroundColor = color;
+    } 
+
+/**
+ * Click en casill
+ * @param {*} pos (posición de la celda dentro de reticula)
+ * @returns nothing
+ */
 function picBox(pos) {
     if (picRunning === true) { return; }
     misFiguras[pos].textContent = "casilla: "+pos;
     index2 = pos;
     switch (pos) {
-        case 0: pintaCelda("black"); break;
-        case 1: pintaCelda("white"); break;
+        case 0: pintaCeldas("black"); break;
+        case 1: pintaCeldas("white"); break;
         case 2: 
             for (index1=0; index1<nroFiguras;index1++) {
                 if (colTablero%2 != 0) {
-                    misFiguras[index1].style.backgroundColor = "black";
-                    misFiguras[index1+=1].style.backgroundColor = "white";
+                    pintaCelda(index1, "black");
+                    pintaCelda(index1+=1, "white");
                 }
                 else if ((Math.floor(index1/colTablero)%2)==0){
-                    misFiguras[index1].style.backgroundColor = "black";
-                    misFiguras[index1+=1].style.backgroundColor = "white";
+                    pintaCelda(index1, "black");
+                    pintaCelda(index1+=1, "white");
                 }
                 else {
-                    misFiguras[index1].style.backgroundColor = "white";
-                    misFiguras[index1+=1].style.backgroundColor = "black";  
+                    pintaCelda(index1, "white");
+                    pintaCelda(index1+=1, "black");  
                 }  
             }
             break;
-        case 3: pintaCelda("red"); break;  
-        case 4: pintaCelda("green"); break;
-        case 5: pintaCelda("yellow"); break;
-        case 6: pintaCelda("blue"); break; 
-        case 7: pintaCelda("pink"); break;   
-        case (nroFiguras-1): pintaCelda(""); break;      
+        case 3: pintaCeldas("red"); break;  
+        case 4: pintaCeldas("green"); break;
+        case 5: pintaCeldas("yellow"); break;
+        case 6: pintaCeldas("blue"); break; 
+        case 7: pintaCeldas("pink"); break;   
+        case (nroFiguras-1): pintaCeldas(""); break;      
     }
     picRunning = true;
     setTimeout (clearCasText, 1000 );
 }
 
+/* FIN */
