@@ -304,7 +304,7 @@ function picBox(pos) {
             }
             break;
         case 3: pintaCeldas("red"); break;  
-        case 4: pintaCeldas("green"); break;
+        case 4: pintaCeldas("yellowgreen"); break;
         case 5: pintaCeldas("yellow"); break;
         case 6: pintaCeldas("blue"); break; 
         case 7: pintaCeldas("pink"); break;   
