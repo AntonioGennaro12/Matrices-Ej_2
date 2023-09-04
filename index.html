@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrices_II</title>
+    <link rel="stylesheet" href="disenio.css">
+</head>
+<body>
+    <div id="juego-memoria">
+        <div id="config">
+            <div id="def-tablero">
+                <div id="cont-filas">
+                    <label for="filas">Nro de Filas</label>
+                    <input type="number" id="filas" placeholder="filas">
+                </div>
+                <div id="cont-col">
+                    <label for="columnas">Nro de Columnas</label>
+                    <input type="number" id="columnas" placeholder="columnas">
+                </div>
+                <div id="cont-ff">
+                    <label for="fac-forma">Fac. de forma</label>
+                    <select id="fac_forma" name="Factor de forma">
+                        <option value=1>1:1</option>
+                        <option value=2>4:3</option>
+                        <option value=3>3:2</option>
+                        <option value=4>16:9</option>
+                        <option value=5>2:1</option>
+                        <option value=6>3:1</option>
+                        <option value=7>4:1</option>
+                        <option value=8>5:1</option>
+                    </select>
+                </div>
+            </div>
+            <div id="cont-boton">
+                <button id="bot-jugar" onclick="jugarMemo()">PLAY</button>
+            </div>
+        </div>
+        
+        <div id="mi-tablero">
+            <div class="row">
+                <div class="casilla" onclick="picBox(0)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(1)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(2)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(3)">  <div class="figura"></div> </div>
+            </div>
+            <div class="row">
+                <div class="casilla" onclick="picBox(4)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(5)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(6)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(7)">  <div class="figura"></div> </div>
+            </div>
+            <div class="row">
+                <div class="casilla" onclick="picBox(8)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(9)">  <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(10)"> <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(11)"> <div class="figura"></div> </div>
+            </div>
+            <div class="row">
+                <div class="casilla" onclick="picBox(12)"> <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(13)"> <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(14)"> <div class="figura"></div> </div>
+                <div class="casilla" onclick="picBox(15)"> <div class="figura"></div> </div>
+            </div>
+        </div>
+    </div>
+    <script src="manejo.js"></script>
+</body>
+</html>

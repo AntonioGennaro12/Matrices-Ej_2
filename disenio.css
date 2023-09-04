@@ -1,0 +1,99 @@
+body {
+    background-color: blanchedalmond;
+}
+
+#juego-memoria {
+    width: 480px;
+    margin-top: 2px;
+    margin-left: 2px;
+    background-color: antiquewhite;
+}
+
+#config {
+    border: solid 2px darkgreen ;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    font-family: Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+#def-tablero {
+    border: solid 1px darkgreen ;
+    display: flex;
+    text-align: center;
+}
+
+label {
+    width: 75%;
+}
+input {
+    width: 25%;
+}
+select {
+    width: 25%;
+}
+#cont-filas {
+    border: solid 1px darkgreen ;
+    width: 100%;
+    display: flex;
+}
+
+#cont-col {
+    border: solid 1px darkgreen ;
+    width: 100%;
+    display: flex;
+}
+
+#cont-ff {
+    border: solid 1px darkgreen ;
+    width: 100%;
+    display: flex;
+}
+
+#cont-boton {
+    width: 100%;
+    border: solid 1px darkgreen ;
+    display: flex;
+}
+
+#bot-jugar {
+    border: solid 1px darkgreen ;
+    background-color: lightgreen;
+    font-weight: bold;
+    width: 100%;
+}
+
+#mi-tablero {
+    width: 100%;
+    height: fit-content;
+    margin-top: 2px;
+    background-color: blanchedalmond;
+    border: solid 2px darkgreen ;
+    display: 1;
+    display: flexbox;
+    /* flex-direction: column; */
+}
+
+.row {
+    width: 100%;
+    flex: 1;   
+    display: flex;
+}
+
+.casilla {
+    border: solid 2px darkgreen ;
+    background-color: rgb(227, 211, 191);
+    width: 100%;
+    height: 30px;
+    flex: 1;   
+    display: flex;
+}
+
+.figura {
+    width: 100%;
+    font-size: 100%;
+    color: violet;
+}
+
