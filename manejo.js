@@ -1,11 +1,12 @@
+// EJERCICIO 2 DE MATRICES (incluye 2.1, 2.2 y 2.3) 
 // Configuración 
-const juegoMemoria  = document.querySelector("#juego-memoria");
+const juegoTablero  = document.querySelector("#juego-tablero");
 const defTablero    = document.querySelector("#def-tablero");
 const misFilas      = document.querySelector("#filas");
 const misColumnas   = document.querySelector("#columnas"); 
 const miFactorF     = document.querySelector("#fac_forma")
 const botonJugar    = document.querySelector("#bot-jugar");
-//
+// Tablero 
 const miTablero     = document.querySelector("#mi-tablero");
 //
 let  misCasillas    = document.querySelectorAll(".casilla");
@@ -17,6 +18,7 @@ console.log("X: "+limiteX+" ,Y: "+limiteY);
 //////////
 let memoInterval    = 0;
 let gameRunning     = false;
+let picRunning      = false;
 //
 const ANCHO_MIN     = 320;
 const MAX_FILAS     = 100;
@@ -46,7 +48,8 @@ const DOS_UNO_V     = 2;
 const TRES_UNO_V    = 3;
 const CUATRO_UNO_V  = 4;
 const CINCO_UNO_V   = 5;
-const DEFAULT_V     = 10;
+// Factor de corrección para ancho de casillas
+const AJUSTE_ANCHO  = 1.022;
 //
 const CYICLE_SHOW   = 20;
 //
@@ -58,6 +61,8 @@ let muestraFigura  = false;
 let quedanFiguras  = 0;
 //
 let index1, index2 = 0
+//
+let tableroInterval = 0;
 //
 // FUNCIONES 
 //
@@ -122,7 +127,6 @@ function jugarMemo() {
             case TRES_UNO:      factorForma = TRES_UNO_V;       break;
             case CUATRO_UNO:    factorForma = CUATRO_UNO_V;     break;
             case CINCO_UNO:     factorForma = CINCO_UNO_V;      break;
-            Default:            factorForma = DEFAULT_V;        break;
         }
 
         nroFiguras = filasTablero * colTablero;
@@ -151,20 +155,19 @@ function jugarMemo() {
 
         let altoCelda   = ((limiteY * 0.85) / filasTablero);
         if (((limiteX*0.95)/colTablero) >= (altoCelda*factorForma)) {
-            let ancho = (altoCelda * factorForma * colTablero);
+            let ancho = ((altoCelda * AJUSTE_ANCHO) * factorForma * colTablero);
             if (ancho > ANCHO_MIN) {
-            juegoMemoria.style.width = (altoCelda * factorForma * colTablero) + "px";
+            juegoTablero.style.width = ancho + "px";
             }
-            else juegoMemoria.style.width = ANCHO_MIN + "px";
+            else juegoTablero.style.width = ANCHO_MIN + "px";
         }
         else {
-            juegoMemoria.style.width = (limiteX*0.95) + "px";
+            juegoTablero.style.width = (limiteX*0.95) + "px";
         }
         
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
-        }
-                
+        }         
         initAll();
     }
 }
@@ -183,9 +186,11 @@ function initAll () {
     quedanFiguras   = CYICLE_SHOW;  //nroFiguras;
     startShowBoton();
     gameRunning     = true;
-    memoInterval    = setInterval(showInicial, 250); 
+    tableroInterval = setInterval(showInicial, 250); 
 }
-
+/**
+ * Show de bienvenida
+ */
 function showInicial () {
     if(quedanFiguras > 0) {
         if (!muestraFigura) {
@@ -215,7 +220,7 @@ function showInicial () {
         // ACA INICIA EL JUEGO
         startGameBoton();
         gameRunning     = true;
-        memoInterval    = setInterval(memoTest, 2000); 
+        tableroInterval = setInterval(memoTest, 2000); 
     } 
 }
 
@@ -230,13 +235,14 @@ function memoTest () {
  * Detiene el Intervalo del Temporizador
  */
 function stopTimer () {
-    clearInterval(memoInterval);
+    clearInterval(tableroInterval);
 } 
 /**
  * Borra el texto de la casilla
  */
 function clearCasText (){
     misFiguras[index2].textContent = "";
+    picRunning = false;
 }
 
 function pintaCelda(color) {
@@ -246,7 +252,8 @@ function pintaCelda(color) {
 } 
 
 function picBox(pos) {
-    misFiguras[pos].textContent = "cas: "+pos;
+    if (picRunning === true) { return; }
+    misFiguras[pos].textContent = "casilla: "+pos;
     index2 = pos;
     switch (pos) {
         case 0: pintaCelda("black"); break;
@@ -274,6 +281,7 @@ function picBox(pos) {
         case 7: pintaCelda("pink"); break;   
         case (nroFiguras-1): pintaCelda(""); break;      
     }
+    picRunning = true;
     setTimeout (clearCasText, 1000 );
 }
 
