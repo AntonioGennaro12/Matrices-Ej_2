@@ -49,7 +49,7 @@ const TRES_UNO_V    = 3;
 const CUATRO_UNO_V  = 4;
 const CINCO_UNO_V   = 5;
 // Factor de corrección para ancho de casillas
-const AJUSTE_ANCHO  = 1.022;
+const AJUSTE_ANCHO  = 1.04;
 //
 const CYICLE_SHOW   = 20;
 //
@@ -264,14 +264,26 @@ function pintaCelda(idx, color) {
     } 
 
 /**
- * Click en casill
+ * muestra en la casilla la posición
+ * @param {Number} pos 
+ */
+function muestraPos(pos) {
+    let fila = Math.floor(pos/colTablero);
+    let col  = pos%colTablero;
+    misFiguras[pos].textContent = "pos: "+fila+"-"+col;
+    index2 = pos;
+    setTimeout (clearCasText, 1000 );
+}
+
+/**
+ * Click en casilla
  * @param {*} pos (posición de la celda dentro de reticula)
  * @returns nothing
  */
 function picBox(pos) {
     if (picRunning === true) { return; }
-    misFiguras[pos].textContent = "casilla: "+pos;
-    index2 = pos;
+    picRunning = true;
+    muestraPos(pos);
     switch (pos) {
         case 0: pintaCeldas("black"); break;
         case 1: pintaCeldas("white"); break;
@@ -298,8 +310,5 @@ function picBox(pos) {
         case 7: pintaCeldas("pink"); break;   
         case (nroFiguras-1): pintaCeldas(""); break;      
     }
-    picRunning = true;
-    setTimeout (clearCasText, 1000 );
 }
-
 /* FIN */
