@@ -267,9 +267,12 @@ function picBox(pos) {
                 }  
             }
             break;
-        case 3: pintaCelda("green"); break;  
-        case 4: pintaCelda("red"); break;   
-        default: pintaCelda(""); break;      
+        case 3: pintaCelda("red"); break;  
+        case 4: pintaCelda("green"); break;
+        case 5: pintaCelda("yellow"); break;
+        case 6: pintaCelda("blue"); break; 
+        case 7: pintaCelda("pink"); break;   
+        case (nroFiguras-1): pintaCelda(""); break;      
     }
     setTimeout (clearCasText, 1000 );
 }
