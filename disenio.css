@@ -55,12 +55,20 @@ select {
 #cont-boton {
     width: 100%;
     border: solid 1px darkgreen ;
+    text-align: center;
     display: flex;
 }
 
-#bot-jugar {
+#bot-tablero {
     border: solid 1px darkgreen ;
     background-color: lightgreen;
+    font-weight: bold;
+    width: 100%;
+}
+
+#bot-game {
+    border: solid 1px darkgreen ;
+    background-color: lightsteelblue;
     font-weight: bold;
     width: 100%;
 }
@@ -94,6 +102,7 @@ select {
 .figura {
     width: 100%;
     font-size: 100%;
+    text-align: center;
     color: violet;
 }
 

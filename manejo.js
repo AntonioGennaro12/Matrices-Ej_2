@@ -1,3 +1,4 @@
+// SE AGREGA EJERCICIO 3 CON EL JUEGO DE OBSTACULO VERSIÓN ARCADE (IZQUIERDA A DERACHA)
 // EJERCICIO 2 DE MATRICES (incluye 2.1, 2.2 y 2.3) 
 // Configuración 
 const juegoTablero  = document.querySelector("#juego-tablero");
@@ -5,18 +6,19 @@ const defTablero    = document.querySelector("#def-tablero");
 const misFilas      = document.querySelector("#filas");
 const misColumnas   = document.querySelector("#columnas"); 
 const miFactorF     = document.querySelector("#fac_forma")
-const botonJugar    = document.querySelector("#bot-jugar");
+const botonTablero  = document.querySelector("#bot-tablero");
+const botonGame     = document.querySelector("#bot-game");
 // Tablero 
 const miTablero     = document.querySelector("#mi-tablero");
 //
 let  misCasillas    = document.querySelectorAll(".casilla");
 let  misFiguras     = document.querySelectorAll(".figura");
+let  figuraAll      = document.querySelector(".figura");
 /////// Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
 console.log("X: "+limiteX+" ,Y: "+limiteY);
 //////////
-let memoInterval    = 0;
 let gameRunning     = false;
 let picRunning      = false;
 //
@@ -53,16 +55,39 @@ const AJUSTE_ANCHO  = 1.04;
 //
 const CYICLE_SHOW   = 20;
 //
-let filasTablero   = ALTO_TABLERO;
-let colTablero     = ANCHO_TABLERO;
-let nroFiguras     = filasTablero * colTablero;
-let factorForma    = UNO_UNO_V;
-let muestraFigura  = false;
-let quedanFiguras  = 0;
+let filasTablero    = ALTO_TABLERO;
+let colTablero      = ANCHO_TABLERO;
+let anchoTabla      = 0;
+let altoCelda       = 0;
+let anchoCelda      = 0;
+let nroFiguras      = filasTablero * colTablero;
+let factorForma     = UNO_UNO_V;
+let muestraFigura   = false;
+let quedanFiguras   = 0;
 //
-let index1, index2 = 0
-//
+let index1, index2  = 0
 let tableroInterval = 0;
+//
+//// GAME
+const EMO_PLAYERS   = ["🧒", "👩🏾‍🦱", "👱‍♀️", "👩🏽‍🦱", "👧", "👱", "👵🏼", "🧓"];
+const EMO_GOAL      = ["🥅", "🏡", "🚪", "🏆"];
+const EMO_ENEMIES   = ["👿", "😖", "🤬", "😠", "😡", "👹", "👺", "💀"];
+let gameActive      = false;
+let goalPos         = 0;
+let goalEmo         = EMO_GOAL[0];
+let emoEnemy        = EMO_ENEMIES [0];
+let enemyPos        = 0;
+let myEmo           = EMO_PLAYERS [0];
+let myPos           = 0;
+// 
+let enemyDir        = 0;
+const ENE_GO_L      = 1;
+const ENE_GO_R      = 2;
+//
+let waitShow        = false;
+//
+botonTablero.style.display = "block";
+botonGame.style.display = "none";
 //
 // FUNCIONES 
 //
@@ -70,23 +95,23 @@ let tableroInterval = 0;
  * Cambia al boton PLAY normal
  */
 function startAgain() {
-    botonJugar.textContent = "PLAY";
-    botonJugar.style.backgroundColor = "lightgreen";
+    botonTablero.textContent = "ARMAR TABLERO";
+    botonTablero.style.backgroundColor = "lightgreen";
 }
 /**
  * Camabia al boton a REINICIAR
  */
 function startGameBoton() {
-    botonJugar.textContent = "REINICIAR";
-    botonJugar.style.backgroundColor = "gold";
+    botonTablero.textContent = "REINICIAR TABLERO";
+    botonTablero.style.backgroundColor = "gold";
 }
 
 /**
  * Camabia al boton a espera / show
  */
 function startShowBoton() {
-    botonJugar.textContent = " . . . . . ";
-    botonJugar.style.backgroundColor = "pink";
+    botonTablero.textContent = " . . . . . ";
+    botonTablero.style.backgroundColor = "pink";
 }
 
 /**
@@ -95,15 +120,15 @@ function startShowBoton() {
  */
 function llenaColumnas() {
     let mistring = "";
-        for (let i=0;i<colTablero;i++){
-            mistring += `
-            <div class="casilla" onclick="picBox(${index1})"> <div class="figura"></div> </div>
-            `;
-            index1++;
-        }
-        return (mistring);
+    for (let i=0;i<colTablero;i++){
+        mistring += `
+        <div class="casilla" onclick="picBox(${index1})"> <div class="figura"></div> </div>
+        `;
+        index1++;
     }
- 
+    return (mistring);
+} 
+
 /**
  * funcion llamada al clikear para aplicar la config o reiniciar
  * @returns nothing
@@ -111,11 +136,15 @@ function llenaColumnas() {
 function playTablero() {
     if (gameRunning == true) {
         gameRunning = false;
+        gameActive = false;  // del game
+        clearTablero();
         stopTimer();
+        botonGame.style.display = "none";
         defTablero.style.display = "flex";
         setTimeout (startAgain(), 500);
     }
     else {
+        defTablero.style.display = "flex";
         filasTablero = parseInt(misFilas.value);
         colTablero = parseInt(misColumnas.value);
         switch (parseInt(miFactorF.value)) {
@@ -133,8 +162,8 @@ function playTablero() {
         console.log(nroFiguras);
 
         if (((colTablero * 30) > limiteX) || ((filasTablero * 20 ) > (limiteY-40))) {
-            botonJugar.textContent = "Esp. Insuficiente!!";
-                botonJugar.style.backgroundColor = "red";
+            botonTablero.textContent = "Esp. Insuficiente!!";
+                botonTablero.style.backgroundColor = "red";
                 setTimeout(startAgain, 1000);
                 return;
         }
@@ -153,35 +182,43 @@ function playTablero() {
         misCasillas   = misCasillasI;
         misFiguras    = misFigurasI;
 
-        let altoCelda   = ((limiteY * 0.85) / filasTablero);
+        altoCelda   = ((limiteY * 0.85) / filasTablero);
         if (((limiteX*0.98)/colTablero) >= (altoCelda*factorForma)) {
-            let ancho = ((altoCelda * AJUSTE_ANCHO) * factorForma * colTablero);
-            if (ancho > ANCHO_MIN) {
-            juegoTablero.style.width = ancho + "px";
+            anchoTabla = ((altoCelda * AJUSTE_ANCHO) * factorForma * colTablero);
+            if (anchoTabla <= ANCHO_MIN) { 
+                anchoTabla = ANCHO_MIN; 
             }
-            else juegoTablero.style.width = ANCHO_MIN + "px";
         }
-        else {
-            juegoTablero.style.width = (limiteX*0.98) + "px";
+        else { 
+            anchoTabla = limiteX*0.98; 
         }
-        
+        juegoTablero.style.width = anchoTabla + "px";
+        anchoCelda = anchoTabla / colTablero;
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
         }         
         initAll();
     }
 }
+
+/**
+ * Borra el contenido del tablero
+ */
+function clearTablero() {
+    for (let i=0;i<nroFiguras;i++){
+        misFiguras[i].style.display = "block";
+        misFiguras[i].textContent = "";
+        //misFiguras[i].style.backgroundColor = "antiquewhite";  
+    }
+}
+
 /**
  * Completa la inicialización
  */
 function initAll () {
     nroFiguras     = filasTablero * colTablero;
     muestraFigura = false;
-    
-    for (i=0;i<nroFiguras;i++){
-        misFiguras[i].style.display = "block";
-        misFiguras[i].style.backgroundColor = "antiquewhite";  
-    }
+    clearTablero();
     defTablero.style.display = "none";
     quedanFiguras   = CYICLE_SHOW;  //nroFiguras;
     startShowBoton();
@@ -219,16 +256,10 @@ function showInicial () {
         }
         // ACA INICIA EL JUEGO
         startGameBoton();
+        botonGame.style.display = "block";
         gameRunning     = true;
-        tableroInterval = setInterval(miGame, 2000); 
+        //tableroInterval = setInterval(miGame, 1000); 
     } 
-}
-
-/**
- * Juego a futuro
- */    
-function miGame () {
-    return;  
 }
 
 /**
@@ -276,39 +307,310 @@ function muestraPos(pos) {
 }
 
 /**
+ * pinta el tablero de balnco y negro como si fuera un damero o ajedrés 
+ */
+function dibujaTabAjedres () {
+    for (index1=0; index1<nroFiguras;index1++) {
+        if (colTablero%2 != 0) {
+            pintaCelda(index1, "black");
+            if(++index1<nroFiguras) {pintaCelda(index1, "white");}
+        }
+        else if ((Math.floor(index1/colTablero)%2)==0){
+            pintaCelda(index1, "black");
+            pintaCelda(index1+=1, "white");
+        }
+        else {
+            pintaCelda(index1, "white");
+            pintaCelda(index1+=1, "black");  
+        }  
+    }
+}
+
+/**
  * Click en casilla
  * @param {*} pos (posición de la celda dentro de reticula)
  * @returns nothing
  */
 function picBox(pos) {
     if (picRunning === true) { return; }
-    picRunning = true;
-    muestraPos(pos);
+    if (!gameActive) { 
+        picRunning = true;
+        muestraPos(pos);
+    }
     switch (pos) {
-        case 0: pintaCeldas("black"); break;
-        case 1: pintaCeldas("white"); break;
-        case 2: 
-            for (index1=0; index1<nroFiguras;index1++) {
-                if (colTablero%2 != 0) {
-                    pintaCelda(index1, "black");
-                    pintaCelda(index1+=1, "white");
-                }
-                else if ((Math.floor(index1/colTablero)%2)==0){
-                    pintaCelda(index1, "black");
-                    pintaCelda(index1+=1, "white");
-                }
-                else {
-                    pintaCelda(index1, "white");
-                    pintaCelda(index1+=1, "black");  
-                }  
-            }
+        case 0:   /// DIBUJA TABLERO tipo AJEDRÉS / DAMAS
+            dibujaTabAjedres ();
             break;
+        case 1: pintaCeldas("black"); break; // DISTINTOS COLORES DE FONDO PARA JUGAR
+        case 2: pintaCeldas("white"); break;
         case 3: pintaCeldas("red"); break;  
         case 4: pintaCeldas("yellowgreen"); break;
         case 5: pintaCeldas("yellow"); break;
-        case 6: pintaCeldas("blue"); break; 
+        case 6: pintaCeldas("lightblue"); break; 
         case 7: pintaCeldas("pink"); break;   
+        case 8: pintaCeldas("whitesmoke"); break; 
+        case (nroFiguras-4): // Selecciona Enemigos
+            emoEnemy = EMO_ENEMIES[ Math.floor(Math.random()*EMO_ENEMIES.length)];
+            break; 
+        case (nroFiguras-3): // Selecciona Jugador
+            myEmo = EMO_PLAYERS[ Math.floor(Math.random()*EMO_PLAYERS.length)];
+            misFiguras[myPos].textContent = myEmo;
+            break;
+        case (nroFiguras-2):  // Selecciona GOAL
+            goalEmo = EMO_GOAL[ Math.floor(Math.random()*EMO_GOAL.length)];
+            misFiguras[goalPos].textContent = goalEmo;
+            break;  
         case (nroFiguras-1): pintaCeldas(""); break;      
     }
 }
-/* FIN */
+
+//// JUEGO TIPO LABERINTO / OBSTACULOS
+
+// habilita escucha de teclado
+document.addEventListener("keydown", function(event) {
+    manejadorTeclado (event.key);
+});
+
+/////////////////////////////////////////
+/**
+ * Juego GANADO - show In
+ */
+function winShowOn() {
+    botonGame.style.backgroundColor = "yellow";
+    setTimeout (winShowOff, 250)
+}
+/**
+ * Juego GANADO - show Out
+ */
+function winShowOff() {
+    if (--quedanFiguras == 0) {
+        botonGame.textContent = "PLAY GAME / REINICIAR"
+        botonGame.style.backgroundColor = "lightsteelblue";
+        waitShow        = false;
+    }
+    else {
+        botonGame.style.backgroundColor = "red";
+        setTimeout (winShowOn, 250);
+    }
+}
+
+/**
+ * GANA EL JUEGO
+ */
+function ganaJuego() {
+    waitShow        = true;
+    botonGame.textContent = "¡¡¡ G A N A S T E !!!"
+    botonGame.style.backgroundColor = "lightsalmon";
+    quedanFiguras = 20;
+    stopTimer();
+    setTimeout (winShowOn, 250);
+}
+/////////////////////////////////////////
+/**
+ * Juego perdido - show In
+ */
+function lostShowOn() {
+    botonGame.style.backgroundColor = "grey";
+    setTimeout (lostShowOff, 150);
+}
+
+/**
+ * Juego perdido - show Out
+ */
+function lostShowOff() {
+    if (--quedanFiguras == 0) {
+        botonGame.style.color = "black";
+        botonGame.textContent = "PLAY GAME / REINICIAR"
+        botonGame.style.backgroundColor = "lightsteelblue";
+        waitShow  = false;
+    }
+    else {
+        botonGame.style.backgroundColor = "black";
+        setTimeout (lostShowOn, 150);
+    }
+}
+
+/**
+ * PIERDE EL JUEGO
+ */
+function pierdeJuego() {
+    waitShow        = true;
+    botonGame.textContent = "--- P E R D I S T E ---"
+    botonGame.style.color = "white";
+    botonGame.style.backgroundColor = "black";
+    quedanFiguras = 20;
+    stopTimer();
+    setTimeout (lostShowOn, 150);
+}
+
+
+/**
+ * Manejador de teclado para movimiento del Jugador.
+ * @param {String} tecla 
+ */
+function manejadorTeclado (tecla) {
+    if (gameActive === true) {
+        misFiguras[myPos].textContent = "";
+        let lastPos = myPos;
+        let rightAr = false;
+        switch(tecla) {
+            case "ArrowLeft": // Maneja el movimiento hacia la izquierda
+                myPos--;
+                if (((myPos%colTablero) == (colTablero-1))||((myPos%colTablero) < 0)) {
+                    myPos++;
+                }
+                break;
+            case "ArrowRight": // Maneja el movimiento hacia la derecha
+                rightAr = true;
+                myPos++;
+                if (((myPos%colTablero) == 0)||((myPos%colTablero) >= nroFiguras)) {
+                    myPos--;
+                }
+                break;
+            case "ArrowUp": // Maneja el movimiento hacia arriba
+                if (((myPos-=colTablero) < 0)) {
+                    myPos+=colTablero;
+                }
+                break;
+            case "ArrowDown": // Maneja el movimiento hacia abajo
+                if (((myPos+=colTablero) > nroFiguras)) {
+                    myPos-=colTablero;
+                }
+                break;
+            case "e":
+            case "E":
+            case "x":
+            case "X":    
+                playTablero();
+                break;
+        }
+        /// Aca tendría que escribir, pero primero debe testear si no esta por chocar 
+        /// con el enemigo (perder) o entrar al portal por la izquierda (arrow right) que Gana el Juego. 
+        if (myPos == enemyPos) { // de cualquier lado que choque con el enemigo pierde...
+            misFiguras[lastPos].textContent = myEmo;
+            pierdeJuego();
+        }
+        else if (myPos == goalPos)  {
+            misFiguras[lastPos].textContent = myEmo;
+            myPos = lastPos;
+            if (rightAr) { // Si no es Arrow right no gana... se queda donde está
+                ganaJuego();
+            }        
+        } 
+        else {
+            misFiguras[myPos].textContent = myEmo; 
+        }
+    }
+}
+
+/**
+ * muestra en la casilla un Mensaje
+ * @param {Number} pos 
+ */
+function muestraMsg(pos, texto) {
+    let fila = Math.floor(pos/colTablero);
+    let col  = pos%colTablero;
+    misFiguras[pos].textContent = texto;
+    index2 = pos;
+    setTimeout (clearCasText, 1000 );
+}
+
+
+/**
+ * MOVIMIENTO DE EMOGYS MALOS
+ */    
+function miGame () {
+    if (gameActive == true) {
+        let eneLastPos = enemyPos;
+        misFiguras[enemyPos].textContent = "";
+        switch (enemyDir) {
+            case ENE_GO_R:
+                enemyPos++;
+                if ((enemyPos%colTablero) > (colTablero-2) ) { // si se pasó a la derecha
+                    enemyPos += (colTablero-1);                  // va la fila de abajo 
+                } 
+                if (enemyPos > (nroFiguras-colTablero)) {
+                    enemyPos = ((nroFiguras-colTablero)-2);
+                    enemyDir = ENE_GO_L;               
+                }
+                break;
+            case ENE_GO_L:
+                enemyPos--;
+                if ((enemyPos%colTablero) <= 0) {
+                    enemyPos -= (colTablero-1); 
+                }
+                if (enemyPos < colTablero ) {
+                    enemyPos = colTablero+1;
+                    enemyDir = ENE_GO_R;
+                }
+                break;
+        }
+        if (enemyPos == myPos) {
+            misFiguras[eneLastPos].textContent = emoEnemy;
+            pierdeJuego();
+        }
+        else {
+            misFiguras[enemyPos].textContent = emoEnemy; 
+        }
+    }
+}
+
+/**
+ * Rehabilita despues d emostra error en cantidad de columanas
+ */
+function againGame () {
+    botonGame.textContent = "PLAY GAME";
+    botonGame.style.backgroundColor = "lightsteelblue";
+}
+/**
+ * Función que inicia el juego o reinicia
+ */
+function playGame() {
+    if (!waitShow) {
+        if (gameActive == true) {
+            gameActive = false;
+            stopTimer();
+            botonTablero.style.display = "block";
+            botonGame.textContent = "PLAY GAME"
+            botonGame.style.backgroundColor = "lightsteelblue";
+        }
+        else {
+        // Oculta boton "ARMAR Tablero" / "Reiniciar" 
+        // Y muestra solo boton PLAY GAME / DETENER GAME y REINICIAR GAME
+        if (colTablero < 3 ) {
+            botonGame.textContent = "MINIMO 3 COLUMNAS"
+            botonGame.style.backgroundColor = "lightsalmon";
+            setTimeout (againGame, 1000);
+        }
+        else {
+            botonTablero.style.display = "none";
+            botonGame.textContent = "DETENER GAME / REINICIAR";
+            gameActive = true;
+            // Inicializa Game
+            clearTablero();
+            let tamCelda = 0;
+            // define tamaño de EMOGI
+            if (anchoCelda > altoCelda ) { tamCelda = altoCelda;}
+            else { tamCelda = anchoCelda;}
+            misFiguras.forEach(function(elemento) {
+                elemento.style.fontSize = (tamCelda*0.65)+"px"; });
+            // ubica la "Meta"
+            goalPos = ((Math.floor(filasTablero/2))*colTablero)+(colTablero-1);
+            misFiguras[goalPos].textContent = goalEmo;
+            // Player
+            myPos = Math.floor(filasTablero/2)*colTablero;
+            misFiguras[myPos].textContent = myEmo;
+            enemyDir = ENE_GO_R;
+            // ENEMIGO
+            do {
+                enemyPos = [Math.floor(Math.random()*nroFiguras)];
+            } while ((enemyPos == myPos)||(enemyPos == goalPos));
+            emoEnemy = EMO_ENEMIES[ Math.floor(Math.random()*EMO_ENEMIES.length)];
+            misFiguras[enemyPos].textContent = emoEnemy;
+            // Inicia...
+            tableroInterval = setInterval(miGame, 300);
+            } 
+        }
+    }
+}
+/* FIN */ 
