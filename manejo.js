@@ -488,7 +488,9 @@ function manejadorTeclado (tecla) {
         /// con el enemigo (perder) o entrar al portal por la izquierda (arrow right) que Gana el Juego. 
         if (myPos == enemyPos) { // de cualquier lado que choque con el enemigo pierde...
             misFiguras[lastPos].textContent = myEmo;
+            if (waitShow = false) {  // verifica si ya no esta mostrando que se ganó o se perdió...
             pierdeJuego();
+            }
         }
         else if (myPos == goalPos)  {
             misFiguras[lastPos].textContent = myEmo;
@@ -517,31 +519,31 @@ function muestraMsg(pos, texto) {
 
 
 /**
- * MOVIMIENTO DE EMOGYS MALOS
+ * MOVIMIENTO DE EMOGYS MALOS (sentido horario)
  */    
 function miGame () {
     if (gameActive == true) {
         let eneLastPos = enemyPos;
-        misFiguras[enemyPos].textContent = "";
+        misFiguras[enemyPos].textContent = ""; // borro en posición actual
         switch (enemyDir) {
-            case ENE_GO_R:
+            case ENE_GO_R: // esta yendo hacia la derecha
                 enemyPos++;
                 if ((enemyPos%colTablero) > (colTablero-2) ) { // si se pasó a la derecha
                     enemyPos += (colTablero-1);                  // va la fila de abajo 
                 } 
-                if (enemyPos > (nroFiguras-colTablero)) {
-                    enemyPos = ((nroFiguras-colTablero)-2);
-                    enemyDir = ENE_GO_L;               
+                if (enemyPos > (nroFiguras-colTablero)) {        // si llega a la ultima fila 
+                    enemyPos = ((nroFiguras-colTablero)-2);      // cambia el esentido y 
+                    enemyDir = ENE_GO_L;                         // va hacia la izquierda
                 }
                 break;
-            case ENE_GO_L:
+            case ENE_GO_L: // esta yendo hacia la izquierda
                 enemyPos--;
-                if ((enemyPos%colTablero) <= 0) {
-                    enemyPos -= (colTablero-1); 
+                if ((enemyPos%colTablero) <= 0) {     // ssi llega al borde izquierdp 
+                    enemyPos -= (colTablero-1);        // va a la fila dearriba 
                 }
-                if (enemyPos < colTablero ) {
-                    enemyPos = colTablero+1;
-                    enemyDir = ENE_GO_R;
+                if (enemyPos < colTablero ) {         // si llega a la primera fila 
+                    enemyPos = colTablero+1;          // cambia el sentido 
+                    enemyDir = ENE_GO_R;              // y va hacia la derecha
                 }
                 break;
         }
@@ -579,6 +581,11 @@ function playGame() {
         // Y muestra solo boton PLAY GAME / DETENER GAME y REINICIAR GAME
         if (colTablero < 3 ) {
             botonGame.textContent = "MINIMO 3 COLUMNAS"
+            botonGame.style.backgroundColor = "lightsalmon";
+            setTimeout (againGame, 1000);
+        }
+        else if (filasTablero < 4 ) {
+            botonGame.textContent = "MINIMO 4 FILAS"
             botonGame.style.backgroundColor = "lightsalmon";
             setTimeout (againGame, 1000);
         }
