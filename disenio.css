@@ -4,8 +4,8 @@ body {
 
 #juego-tablero {
     width: 480px;
-    margin-top: 2px;
-    margin-left: 2px;
+    margin-top: 1px;
+    margin-left: 1px;
     background-color: antiquewhite;
 }
 
@@ -57,13 +57,14 @@ select {
     border: solid 1px darkgreen ;
     text-align: center;
     display: flex;
+    height: 30px;
 }
 
 #bot-tablero {
     border: solid 1px darkgreen ;
     background-color: lightgreen;
     font-weight: bold;
-    width: 100%;
+    width: 100%; 
 }
 
 #bot-game {
@@ -104,5 +105,26 @@ select {
     font-size: 100%;
     text-align: center;
     color: violet;
+    
 }
+
+#bot-nav {
+    margin-top: 2px;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    background-color: transparent;
+    border: none;
+    display: none;
+}
+
+.nav-but {
+    width: 100%;
+    height: auto;
+    border: none;
+    font-size: 35px;
+    background-color: transparent;
+}
+
+
 

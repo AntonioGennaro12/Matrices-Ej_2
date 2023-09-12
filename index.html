@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matrices_II</title>
     <link rel="stylesheet" href="disenio.css">
-</head>
+    <link rel="icon"  type="image/png"  href="joystick2.jpg"> 
+</head>  
 <body>
     <div id="juego-tablero">
         <div id="config">
             <div id="def-tablero">
                 <div id="cont-filas">
                     <label for="filas">Nro de Filas</label>
-                    <input type="number" id="filas" placeholder="filas">
+                    <input type="number" min="2" max="35" id="filas" placeholder="filas" value="3">                    
                 </div>
                 <div id="cont-col">
                     <label for="columnas">Nro de Columnas</label>
-                    <input type="number" id="columnas" placeholder="columnas">
+                    <input type="number" min="2" max="40" value="4" id="columnas" placeholder="columnas">
                 </div>
                 <div id="cont-ff">
                     <label for="fac-forma">Fac. de forma</label>
@@ -57,12 +58,12 @@
                 <div class="casilla" onclick="picBox(10)"> <div class="figura"></div> </div>
                 <div class="casilla" onclick="picBox(11)"> <div class="figura"></div> </div>
             </div>
-            <div class="row">
-                <div class="casilla" onclick="picBox(12)"> <div class="figura"></div> </div>
-                <div class="casilla" onclick="picBox(13)"> <div class="figura"></div> </div>
-                <div class="casilla" onclick="picBox(14)"> <div class="figura"></div> </div>
-                <div class="casilla" onclick="picBox(15)"> <div class="figura"></div> </div>
-            </div>
+        </div>
+        <div id="bot-nav">
+            <button class="nav-but" onclick = "butUp()"   >⬆️</button>
+            <button class="nav-but" onclick = "butDown()" >⬇️</button>
+            <button class="nav-but" onclick = "butLeft()" >⬅️</button>
+            <button class="nav-but" onclick = "butRight()">➡️</button>
         </div>
     </div>
     <script src="manejo.js"></script>
