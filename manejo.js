@@ -918,8 +918,9 @@ function generaBarreras() {
         for (index1 = 0; index1 < nroBarr; index1++) { // tantas como definido  
             do {
                 index2 = Math.floor(Math.random() * nroFiguras);
-            //} while ((index2 != myPos) || (index2 != goalPos));
-            } while (((index2 % colTablero) < 1) || ((index2 % colTablero) > (colTablero - 2)));
+            } while( ((index2 % colTablero) < 1)                || 
+                     ((index2 % colTablero) > (colTablero - 2)) ||
+                      (index2 == (goalPos-1)) ); // no se debe obstruir la entrada
             barrier[index2] = true;
             cargadas++; 
             misFiguras[index2].textContent = EMO_BARRIER;
