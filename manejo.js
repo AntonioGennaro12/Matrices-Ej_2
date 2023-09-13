@@ -221,6 +221,10 @@ function playTablero() {
         }
         juegoTablero.style.width = anchoTabla + "px";
         anchoCelda = anchoTabla / colTablero;
+        // Ajusta alto celda para no exceder 
+        if (altoCelda > (anchoCelda * 1.25)) {
+            altoCelda = (anchoCelda * 1.25);
+        }
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
         }         
