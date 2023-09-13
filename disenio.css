@@ -126,25 +126,15 @@ select {
     display: flex;    
 } 
 
-.nav-but1 {
+.nav-but {
     width: 100%;
     height: auto;
     border: none;
-    font-size: 40px;
+    font-size: 60px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     cursor: pointer;
 }
 
-.nav-but2 {
-    width: 100%;
-    height: auto;
-    border: none;
-    font-size: 40px;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-}
 
