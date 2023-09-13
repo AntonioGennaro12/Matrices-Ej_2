@@ -19,7 +19,6 @@ let  figuraAll      = document.querySelector(".figura");
 /////// Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
-console.log("X: "+limiteX+" ,Y: "+limiteY);
 //////////
 let gameRunning     = false;
 let picRunning      = false;
@@ -172,6 +171,10 @@ function playTablero() {
         setTimeout (startAgain(), 500);
     }
     else {
+        limiteX         = window.innerWidth;
+        limiteY         = window.innerHeight;
+        console.log("X: "+limiteX+" ,Y: "+limiteY);
+        ///
         defTablero.style.display = "flex";
         filasTablero = parseInt(misFilas.value);
         colTablero = parseInt(misColumnas.value);
