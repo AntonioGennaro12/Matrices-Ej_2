@@ -19,8 +19,8 @@ let  figuraAll      = document.querySelector(".figura");
 /////// Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
-juegoTablero.style.width = (limiteX*0.98) + "px";
-
+if (limiteX > 480 ) { juegoTablero.style.width = 480 + "px"; }
+else { juegoTablero.style.width = (limiteX*0.98) + "px"; }
 //////////
 let gameRunning     = false;
 let picRunning      = false;
