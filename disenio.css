@@ -134,7 +134,7 @@ select {
     background-color: transparent;
     display: flex;
     justify-content: center;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 
