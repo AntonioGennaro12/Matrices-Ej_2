@@ -12,7 +12,6 @@ const botonGame     = document.querySelector("#bot-game");
 const miTablero     = document.querySelector("#mi-tablero");
 // Navegación para celulares
 const botonNavega   = document.querySelector("#bot-nav");
-const mousePad      = document.querySelector(".mouse-pad");
 //
 let  misCasillas    = document.querySelectorAll(".casilla");
 let  misFiguras     = document.querySelectorAll(".figura");
@@ -818,7 +817,7 @@ function playGame() {
     if (!waitShow) { // si esta mostrando secuencia de ganancia o pérdida..
         if (gameActive === true) {
             detieneGame();
-            mousePad.style.display = "none";
+            if (deviceType === "Movil") {mousePad.style.display = "none";}
         }
         else {
             // Chequea tamaño mínimo de tablero (4 filas x 3 columnas)
@@ -854,7 +853,7 @@ function playGame() {
                 // Inicia Juego
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
-                if (deviceType == "Computadora") { initSwipe();}
+                if (deviceType == "Movil") { initSwipe();}
                     tableroInterval = setInterval(miGame, 250);
                 startSonido();
             } 
@@ -1013,21 +1012,17 @@ function initVectEnemy() {
 // PRUEBA MANEJO DESLIZADO EN CELULAR
 function initSwipe() {
 /////// Ajusta en función del sispositivo y el operativo 
-    if (deviceType == "Computadora") {
-        mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
-        mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
-    }
+    const mousePad      = document.querySelector(".mouse-pad");
+    mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
+    mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
+    
+    let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
+    mousePad.style.height = altoPad + "px";   
 
-    if ((operatingSystem == "iOS") || (operatingSystem == "Windows")) {
+    if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
         mousePad.style.color = "white";
         mousePad.style.display = "block";    
     }
-
-    if (deviceType == "Computadora") {
-        let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
-        mousePad.style.height = altoPad + "px"; 
-    }            
-
 }
  
 // Mover el player en dispositivos móviles  (Swipe up-down-left-right)
