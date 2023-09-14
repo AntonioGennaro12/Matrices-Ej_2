@@ -507,7 +507,7 @@ function picBox(pos) {
             }
             else { 
                 botonNavega.style.display = "none";
-                if (operatingSystem == "iOS") {
+                if (operatingSystem == "Windows") {
                 mousePad.style.display = "block";
                 }
             }
@@ -672,7 +672,8 @@ else {return (pos);}
  */
 function manejadorTeclado (tecla) {
     if (gameActive === true) {
-        misFiguras[myPos].textContent = "";
+        if (myPos != (nroFiguras-1)) {misFiguras[myPos].textContent = "";}
+        else {printHelp();} // si deja posición de Help, la redibuja
         let lastPos = myPos;
         let rightAr = false;
         switch(tecla) {
@@ -853,11 +854,8 @@ function playGame() {
                 // Inicia Juego
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
-                tableroInterval = setInterval(miGame, 250);
-                if (deviceType == "Movil") {
-                    mousePad.style.display = "block";
-                    initSwipe ();
-                }
+                if (deviceType == "Computadora") { initSwipe();}
+                    tableroInterval = setInterval(miGame, 250);
                 startSonido();
             } 
         }
@@ -1013,19 +1011,19 @@ function initVectEnemy() {
 
 
 // PRUEBA MANEJO DESLIZADO EN CELULAR
-function initSwipe () {
+function initSwipe() {
 /////// Ajusta en función del sispositivo y el operativo 
-    if (deviceType == "Movil") {
-        document.querySelector(".mouse-pad").addEventListener("touchstart", startTouch, false);
-        document.querySelector(".mouse-pad").addEventListener("touchmove", moveTouch, false);  
+    if (deviceType == "Computadora") {
+        mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
+        mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
     }
 
-    if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
+    if ((operatingSystem == "iOS") || (operatingSystem == "Windows")) {
         mousePad.style.color = "white";
-        mousePad.style.display = "none";    
+        mousePad.style.display = "block";    
     }
 
-    if (deviceType == "Movil") {
+    if (deviceType == "Computadora") {
         let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
         mousePad.style.height = altoPad + "px"; 
     }            
