@@ -12,11 +12,74 @@ const botonGame     = document.querySelector("#bot-game");
 const miTablero     = document.querySelector("#mi-tablero");
 // Navegación para celulares
 const botonNavega   = document.querySelector("#bot-nav");
+const mousePad      = document.querySelector(".mouse-pad");
 //
 let  misCasillas    = document.querySelectorAll(".casilla");
 let  misFiguras     = document.querySelectorAll(".figura");
 let  figuraAll      = document.querySelector(".figura");
-/////// Toma ancho y alto disponible
+////////// TIPO DE DISPOSITIVO Y SISTEMA OPERATIVO
+/**
+ * Obtiene el tipo de dispositivo 
+ * @returns Tipo de dispositivo
+ */
+function detectDeviceType() {
+    const userAgent = navigator.userAgent;
+    if (/Android/i.test(userAgent)) {
+        return 'Android';
+    } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
+        return 'iOS';
+    } else if (/Windows|Macintosh|Linux/i.test(userAgent)) {
+        return 'Computadora';
+    } else if (/Tablet/i.test(userAgent)) {
+        return 'Tablet';
+    } else if (/Mobile/i.test(userAgent)) {
+        return 'Movil';
+    } else {
+        return 'Desconocido';
+    }
+}
+// Carga el tipo de dispositivo
+let deviceType = detectDeviceType();
+console.log('Dispositivo:', deviceType);
+// Detectar el sistema operativo
+/**
+ * Lee el Sistema Operativo
+ * @returns Sitema Operativo
+ */
+function detectOS() {
+    const userAgent = navigator.userAgent;
+    if (/Android/i.test(userAgent)) {
+        return 'Android';
+    } else if (/iPad|iPhone|iPod/i.test(userAgent)) {
+        return 'iOS';
+    } else if (/Windows/i.test(userAgent)) {
+        return 'Windows';
+    } else if (/Macintosh/i.test(userAgent)) {
+        return 'Macintosh';
+    } else if (/Linux/i.test(userAgent)) {
+        return 'Linux';
+    } else {
+        return 'Desconocido';
+    }
+}
+// Carga el sistema operativo
+let operatingSystem = detectOS();
+console.log('Sistema Operativo:', operatingSystem);
+/////// Ajusta en función del sispositivo y el operativo 
+
+if (deviceType == "Movil") {
+    document.querySelector(".mouse-pad").addEventListener("touchstart", startTouch, false);
+    document.querySelector(".mouse-pad").addEventListener("touchmove", moveTouch, false);  
+}
+
+if ((operatingSystem == "iOS") || (operatingSystem == "Windows")) {
+    console.log("entro a Windows!!)");
+    mousePad.style.color = "white";
+    mousePad.style.display = "block";    
+}
+
+
+// Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
 if (limiteX > 480 ) { juegoTablero.style.width = 500 + "px"; }
@@ -226,13 +289,18 @@ function playTablero() {
         }
         juegoTablero.style.width = anchoTabla + "px";
         anchoCelda = anchoTabla / colTablero;
+        // AJUSTE PARA CELULARES
         // Ajusta alto celda para no exceder 
-        if (altoCelda > (anchoCelda * 1.25)) {
-            altoCelda = (anchoCelda * 1.25);
+        if (altoCelda > (anchoCelda * 1.20)) {
+            altoCelda = (anchoCelda * 1.20);
         }
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
-        }         
+        }  
+        if (deviceType == "Computadora") {
+            let altoPad = limiteY - (altoCelda * (filasTablero+1));
+            mousePad.style.height = altoPad + "px"; 
+        }            
         initAll();
     }
 }
@@ -453,9 +521,11 @@ function picBox(pos) {
         case (nroFiguras-6): // Muestra botones navegación para celulares
             if (botonNavega.style.display == "none") {
                 botonNavega.style.display = "flex";
+                mousePad.style.display = "none";
             }
             else { 
                 botonNavega.style.display = "none";
+                mousePad.style.display = "block";
             }
             break; 
         case (nroFiguras-5): // Muestra safe zone
@@ -954,10 +1024,6 @@ function initVectEnemy() {
 
 
 // PRUEBA MANEJO DESLIZADO EN CELULAR
-
-document.querySelector("#mi-tablero").addEventListener("touchstart", startTouch, false);
-document.querySelector("#mi-tablero").addEventListener("touchmove", moveTouch, false);
-
 // Mover el player en dispositivos móviles  (Swipe up-down-left-right)
 
 var initialX = null;
