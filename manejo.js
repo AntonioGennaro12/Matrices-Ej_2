@@ -297,7 +297,7 @@ function playTablero() {
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
         }  
-        if (deviceType == "Computadora") {
+        if (deviceType == "Movil") {
             let altoPad = limiteY - (altoCelda * (filasTablero+1));
             mousePad.style.height = altoPad + "px"; 
         }            
@@ -833,6 +833,7 @@ function playGame() {
     if (!waitShow) { // si esta mostrando secuencia de ganancia o pérdida..
         if (gameActive === true) {
             detieneGame();
+            mousePad.style.display = "none";
         }
         else {
             // Chequea tamaño mínimo de tablero (4 filas x 3 columnas)
@@ -869,6 +870,7 @@ function playGame() {
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
                 tableroInterval = setInterval(miGame, 250);
+                mousePad.style.display = "block";
                 startSonido();
             } 
         }
