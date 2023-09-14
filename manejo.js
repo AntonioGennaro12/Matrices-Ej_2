@@ -954,3 +954,50 @@ function initVectEnemy() {
 
 
 // PRUEBA MANEJO DESLIZADO EN CELULAR
+
+document.querySelector("#mi-tablero").addEventListener("touchstart", startTouch, false);
+document.querySelector("#mi-tablero").addEventListener("touchmove", moveTouch, false);
+
+// Mover el player en dispositivos móviles  (Swipe up-down-left-right)
+
+var initialX = null;
+var initialY = null;
+  
+function startTouch (e) {
+    initialX = e.touches[0].clientX;
+    initialY = e.touches[0].clientY;
+} 
+
+function moveTouch (e) {
+    if (initialX === null){
+        return;
+    }
+    if (initialY === null){
+        return;
+    }
+    var currentX = e.touches[0].clientX;
+    var currentY = e.touches[0].clientY;
+    var diffX = initialX - currentX;
+    var diffY = initialY - currentY;
+
+    if (Math.abs(diffX) > Math.abs(diffY)){
+        if (diffX > 0) {
+            // Swipe Left
+            manejadorTeclado ("ArrowLeft");
+        } else {
+            // Swipe Right
+            manejadorTeclado ("ArrowRight");
+        }
+    } else {
+        if (diffY > 0){
+            // Swipe Up
+            manejadorTeclado ("ArrowUp");
+        } else {
+            // Swipe Down
+            manejadorTeclado ("ArrowDown")
+        }
+    }      
+    initialX = null;
+    initialY = null;
+    e.preventDefault();
+}
