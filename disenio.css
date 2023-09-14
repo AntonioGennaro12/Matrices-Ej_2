@@ -16,7 +16,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     font-family: Tahoma, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #def-tablero {
@@ -26,10 +26,10 @@ body {
 }
 
 label {
-    width: 75%;
+    width: 80%;
 }
 input {
-    width: 25%;
+    width: 20%;
 }
 select {
     width: 25%;

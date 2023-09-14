@@ -19,7 +19,7 @@ let  figuraAll      = document.querySelector(".figura");
 /////// Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
-if (limiteX > 480 ) { juegoTablero.style.width = 480 + "px"; }
+if (limiteX > 480 ) { juegoTablero.style.width = 500 + "px"; }
 else { juegoTablero.style.width = (limiteX*0.98) + "px"; }
 //////////
 let gameRunning     = false;
@@ -64,7 +64,7 @@ let anchoTabla      = 0;
 let altoCelda       = 0;
 let anchoCelda      = 0;
 let tamCelda        = 0;
-const TAM_TXT       = 0.15; // Tamaño del texto en la Celda
+const TAM_TXT       = 0.20; // Tamaño del texto en la Celda
 const TAM_EMOGI     = 0.65; // Tamaño del Emogi
 let nroFiguras      = filasTablero * colTablero;
 let nroOrdenes      = 1;  // por defecto 1
@@ -382,7 +382,7 @@ function dibujaTabAjedres () {
 }
 
 function printHelp() {
-    misFiguras[nroFiguras-1].style.fontSize = (tamCelda * TAM_TXT) + "px"; 
+    misFiguras[nroFiguras-1].style.fontSize = (tamCelda * TAM_EMOGI) + "px"; 
     misFiguras[nroFiguras-1].textContent = "❓";
 }
 
@@ -951,3 +951,6 @@ function initVectEnemy() {
     }
 }
 /* FIN */ 
+
+
+// PRUEBA MANEJO DESLIZADO EN CELULAR
