@@ -72,10 +72,9 @@ if (deviceType == "Movil") {
     document.querySelector(".mouse-pad").addEventListener("touchmove", moveTouch, false);  
 }
 
-if ((operatingSystem == "iOS") || (operatingSystem == "Windows")) {
-    console.log("entro a Windows!!)");
+if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
     mousePad.style.color = "white";
-    mousePad.style.display = "block";    
+    mousePad.style.display = "none";    
 }
 
 
@@ -298,7 +297,7 @@ function playTablero() {
             misCasillas[i].style.height = altoCelda + "px"; 
         }  
         if (deviceType == "Movil") {
-            let altoPad = limiteY - (altoCelda * (filasTablero+1));
+            let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
             mousePad.style.height = altoPad + "px"; 
         }            
         initAll();
