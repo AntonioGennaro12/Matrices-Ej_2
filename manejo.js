@@ -65,19 +65,6 @@ function detectOS() {
 // Carga el sistema operativo
 let operatingSystem = detectOS();
 console.log('Sistema Operativo:', operatingSystem);
-/////// Ajusta en función del sispositivo y el operativo 
-
-if (deviceType == "Movil") {
-    document.querySelector(".mouse-pad").addEventListener("touchstart", startTouch, false);
-    document.querySelector(".mouse-pad").addEventListener("touchmove", moveTouch, false);  
-}
-
-if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
-    mousePad.style.color = "white";
-    mousePad.style.display = "none";    
-}
-
-
 // Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
@@ -296,10 +283,6 @@ function playTablero() {
         for (let i=0; i< nroFiguras;i++){
             misCasillas[i].style.height = altoCelda + "px"; 
         }  
-        if (deviceType == "Movil") {
-            let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
-            mousePad.style.height = altoPad + "px"; 
-        }            
         initAll();
     }
 }
@@ -524,7 +507,9 @@ function picBox(pos) {
             }
             else { 
                 botonNavega.style.display = "none";
+                if (operatingSystem == "iOS") {
                 mousePad.style.display = "block";
+                }
             }
             break; 
         case (nroFiguras-5): // Muestra safe zone
@@ -869,7 +854,10 @@ function playGame() {
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
                 tableroInterval = setInterval(miGame, 250);
-                mousePad.style.display = "block";
+                if (deviceType == "Movil") {
+                    mousePad.style.display = "block";
+                    initSwipe ();
+                }
                 startSonido();
             } 
         }
@@ -1025,6 +1013,25 @@ function initVectEnemy() {
 
 
 // PRUEBA MANEJO DESLIZADO EN CELULAR
+function initSwipe () {
+/////// Ajusta en función del sispositivo y el operativo 
+    if (deviceType == "Movil") {
+        document.querySelector(".mouse-pad").addEventListener("touchstart", startTouch, false);
+        document.querySelector(".mouse-pad").addEventListener("touchmove", moveTouch, false);  
+    }
+
+    if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
+        mousePad.style.color = "white";
+        mousePad.style.display = "none";    
+    }
+
+    if (deviceType == "Movil") {
+        let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
+        mousePad.style.height = altoPad + "px"; 
+    }            
+
+}
+ 
 // Mover el player en dispositivos móviles  (Swipe up-down-left-right)
 
 var initialX = null;
