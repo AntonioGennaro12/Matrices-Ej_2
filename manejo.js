@@ -1017,7 +1017,7 @@ function initSwipe() {
     mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
     mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
     
-    let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
+    let altoPad = (limiteY - (altoCelda * (filasTablero+2)));
     mousePad.style.height = altoPad + "px"; 
     
     if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
