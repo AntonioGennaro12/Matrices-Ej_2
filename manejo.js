@@ -12,6 +12,7 @@ const botonGame     = document.querySelector("#bot-game");
 const miTablero     = document.querySelector("#mi-tablero");
 // Navegación para celulares
 const botonNavega   = document.querySelector("#bot-nav");
+const mousePad      = document.querySelector(".mouse-pad");
 //
 let  misCasillas    = document.querySelectorAll(".casilla");
 let  misFiguras     = document.querySelectorAll(".figura");
@@ -37,9 +38,6 @@ function detectDeviceType() {
         return 'Desconocido';
     }
 }
-// Carga el tipo de dispositivo
-let deviceType = detectDeviceType();
-console.log('Dispositivo:', deviceType);
 // Detectar el sistema operativo
 /**
  * Lee el Sistema Operativo
@@ -61,6 +59,9 @@ function detectOS() {
         return 'Desconocido';
     }
 }
+// Carga el tipo de dispositivo
+let deviceType = detectDeviceType();
+console.log('Dispositivo:', deviceType);
 // Carga el sistema operativo
 let operatingSystem = detectOS();
 console.log('Sistema Operativo:', operatingSystem);
@@ -162,6 +163,7 @@ let funeral         = new Audio("negros_bailando_con_ataud.mp3");
 const SOUND_VOL     = 0.05;    // Volumen bajo   
 //
 let waitShow        = false;
+let navArrow        = false; // Navegación por default Mouse Pad para móviles
 //
 botonTablero.style.display = "block";
 botonGame.style.display = "none";
@@ -503,13 +505,16 @@ function picBox(pos) {
             if (botonNavega.style.display == "none") {
                 if (deviceType != "iOS") { 
                     botonNavega.style.display = "flex";
+                    navArrow = true;
                     mousePad.style.display = "none";
                 }  
             }
             else { 
                 botonNavega.style.display = "none";
+                navArrow = false;
                 if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
-                mousePad.style.display = "block"; }
+                mousePad.style.display = "block";                
+                }
             }
             break; 
         case (nroFiguras-5): // Muestra safe zone
@@ -578,6 +583,7 @@ function ganaJuego() {
     waitShow   = true;
     gamesound.pause();
     applause.play();
+    gamesound.volume = (SOUND_VOL*3);
     botonGame.textContent = "¡¡¡ G A N A S T E !!!"
     botonGame.style.backgroundColor = "lightsalmon";
     muestraPremio();
@@ -854,8 +860,10 @@ function playGame() {
                 // Inicia Juego
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
-                if ((deviceType == "Android")||(deviceType == "iOS")) { initSwipe();}
-                    tableroInterval = setInterval(miGame, 250);
+                if ((deviceType == "Android")||(deviceType == "iOS")) { 
+                    if (navArrow === true) {initArrow()} else {initSwipe();}
+                }
+                tableroInterval = setInterval(miGame, 250);
                 startSonido();
             } 
         }
@@ -1007,17 +1015,21 @@ function initVectEnemy() {
         eneWrote.push(false);
     }
 }
-/* FIN */ 
+/**
+ * Inicializa Navegación por Flechas
+ */ 
+function initArrow() {
+    mousePad.style.display = "none"; 
+    botonNavega.style.display = "flex";
+}
 
-
-// PRUEBA MANEJO DESLIZADO EN CELULAR
-// Ajusta en función del sispositivo y el operativo 
+// MANEJO SWIPE (DESLIZADO) EN CELULAR
+// Ajusta en función del dispositivo y el operativo 
 function initSwipe() {
-    const mousePad = document.querySelector(".mouse-pad");
-    mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
-    mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
+    mousePad.addEventListener("touchstart", startTouch, { passive: true } );
+    mousePad.addEventListener("touchmove", moveTouch, { passive: true });  
     
-    let altoPad = (limiteY - (altoCelda * (filasTablero+2)));
+    let altoPad = (limiteY - (altoCelda * (filasTablero+1.5)));
     mousePad.style.height = altoPad + "px"; 
     
     if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
@@ -1069,3 +1081,4 @@ function moveTouch (e) {
     initialY = null;
     e.preventDefault();
 }
+/* Fin */
