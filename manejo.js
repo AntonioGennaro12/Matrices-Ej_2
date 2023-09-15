@@ -501,7 +501,7 @@ function picBox(pos) {
         // Especilaes
         case (nroFiguras-6): // Muestra botones navegación para celulares
             if (botonNavega.style.display == "none") {
-                if (deviceType != iOS) { botonNavega.style.display = "flex";}
+                if (deviceType != "iOS") { botonNavega.style.display = "flex";}
                 if ((deviceType == "Android")||(deviceType == "iOS")) {
                     mousePad.style.display = "none"; 
                 }          
