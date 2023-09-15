@@ -40,7 +40,6 @@ function detectDeviceType() {
 // Carga el tipo de dispositivo
 let deviceType = detectDeviceType();
 console.log('Dispositivo:', deviceType);
-alert(deviceType);
 // Detectar el sistema operativo
 /**
  * Lee el Sistema Operativo
@@ -65,7 +64,6 @@ function detectOS() {
 // Carga el sistema operativo
 let operatingSystem = detectOS();
 console.log('Sistema Operativo:', operatingSystem);
-alert(operatingSystem);
 // Toma ancho y alto disponible
 let limiteX         = window.innerWidth;
 let limiteY         = window.innerHeight;
@@ -503,8 +501,10 @@ function picBox(pos) {
         // Especilaes
         case (nroFiguras-6): // Muestra botones navegación para celulares
             if (botonNavega.style.display == "none") {
-                botonNavega.style.display = "flex";
-                if (deviceType == "Movil") {mousePad.style.display = "none"; }          
+                if (deviceType != iOS) { botonNavega.style.display = "flex";}
+                if ((deviceType == "Android")||(deviceType == "iOS")) {
+                    mousePad.style.display = "none"; 
+                }          
             }
             else { 
                 botonNavega.style.display = "none";
@@ -818,7 +818,7 @@ function playGame() {
     if (!waitShow) { // si esta mostrando secuencia de ganancia o pérdida..
         if (gameActive === true) {
             detieneGame();
-            if (deviceType === "Movil") {mousePad.style.display = "none";}
+            if ((deviceType === "Android")||(deviceType === "iOS" )){mousePad.style.display = "none";}
         }
         else {
             // Chequea tamaño mínimo de tablero (4 filas x 3 columnas)
@@ -854,7 +854,7 @@ function playGame() {
                 // Inicia Juego
                 console.log("nroEn: "+nroEnemies);
                 printHelp();
-                if (deviceType == "Movil") { initSwipe();}
+                if ((deviceType == "Android")||(deviceType == "iOS")) { initSwipe();}
                     tableroInterval = setInterval(miGame, 250);
                 startSonido();
             } 
@@ -1011,21 +1011,18 @@ function initVectEnemy() {
 
 
 // PRUEBA MANEJO DESLIZADO EN CELULAR
+// Ajusta en función del sispositivo y el operativo 
 function initSwipe() {
-/////// Ajusta en función del sispositivo y el operativo 
     const mousePad = document.querySelector(".mouse-pad");
     mousePad.addEventListener("touchstart", startTouch, false, { passive: true } );
     mousePad.addEventListener("touchmove", moveTouch, false, { passive: true });  
     
     let altoPad = (limiteY - (altoCelda * (filasTablero+1)));
     mousePad.style.height = altoPad + "px"; 
-    alert("altoPad");
-    alert(altoPad);  
-
+    
     if ((operatingSystem == "iOS") || (operatingSystem == "Android")) {
         mousePad.style.color = "white";
         mousePad.style.display = "block"; 
-        alert(mousePad.style.display);   
     }
 }
  
@@ -1037,11 +1034,9 @@ var initialY = null;
 function startTouch (e) {
     initialX = e.touches[0].clientX;
     initialY = e.touches[0].clientY;
-    alert("entró startTouch");
 } 
 
-function moveTouch (e) {
-    alert("entró startMove");
+function moveTouch (e) {    
     if (initialX === null){
         return;
     }
